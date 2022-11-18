@@ -1,46 +1,39 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const fs = require("fs");
+const express = require('express');
 const app = express();
+const http=require('http');
+const { Server } = require('socket.io');
+const cors=require('cors');
+const server = http.createServer(app);
+const fs = require('fs');
 const csvtojson = require("csvtojson");
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
+app.use(cors());
+
+const io = new Server(server,{
+    cors:{
+        //accept request from localhost:3000 and allowed methods will be GET,POST
+        origin: "*",
+        methods: ["GET","POST"]
+    }
 });
 
-app.use(bodyParser.json());
-
-const port = 5000;
-
-let fileChanged = true;
-
-fs.watchFile("test.csv", () => {
-    fileChanged = true;
-});
-
-app.get("/data", (req, res) => {
-    if (fileChanged) {
+const filename="./test.csv";
+io.on("connection",(socket)=>{
+    fs.watchFile(filename,()=>{
         csvtojson()
-            .fromFile("./test.csv")
+            .fromFile(filename)
             .then((data) => {
                 let columns = [];
                 cols = Object.keys(data[0]);
                 cols.forEach((col) => {
                     columns.push({ accessorKey: col, header: col });
                 });
-                fileChanged = false;
-                res.json(JSON.stringify({ data, columns, fileChanged: true }));
+                socket.emit("sent from the server",data,columns);
             });
-    } else {
-        res.json(JSON.stringify({ fileChanged: false }));
-    }
+    });
+    console.log(`User connected: ${socket.id}`);
 });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+server.listen(3001,()=>{
+    console.log("Listening at 3001")
 });
