@@ -7,9 +7,12 @@ const server = http.createServer(app);
 const fs = require('fs');
 const csvtojson = require("csvtojson");
 const bodyParser = require('body-parser');
+const multer  = require('multer');
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.use(cors());
 
 const io = new Server(server,{
@@ -38,9 +41,28 @@ io.on("connection",(socket)=>{
 });
 
 
-app.post('/post',(req,res)=>{
+app.post('/formpost',(req,res)=>{
     console.log(req.body);
-    res.json(req.body);
+    // res.json(req.body);
+})
+
+const storage= multer.diskStorage({
+    destination: function(req,file,cb){
+        //cb(error,destination)
+        cb(null,'./uploads/');
+    },
+    filename: function(req,file,cb){
+        //cb(error,filename)
+        cb(null,file.originalname)
+    }
+})
+const upload = multer({
+    storage:storage
+}).single('file');
+
+app.post('/csvpost',upload,(req,res)=>{
+    // res.send(req.file);
+    res.send(req.file);
 })
 
 server.listen(3001,()=>{
