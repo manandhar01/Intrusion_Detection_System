@@ -28,9 +28,4 @@ apiRouter.post("/upload_file", upload, (req, res) => {
     res.send({ a: 5 });
 });
 
-// apiRouter.post("/test_row", (req, res) => {
-//     console.log(req.body);
-//     res.send(JSON.stringify('abc'))
-// });
-
 module.exports = apiRouter;
