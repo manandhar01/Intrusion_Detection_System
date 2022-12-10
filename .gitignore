@@ -1,3 +1,6 @@
 node_modules/
 webgui/
 abc.csv
+Results/
+uploads/*
+*/__pycache__/
