@@ -4,6 +4,7 @@ import argparse
 import os
 from IGTD_Functions import min_max_transform, table_to_image
 
+
 def argument_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", help="path to csv file")
@@ -35,9 +36,9 @@ if __name__ == "__main__":
     row_data["02"] = 0
     row_data["03"] = 0
     row_data["04"] = 0
-    norm_row_data = min_max_transform(row_data) 
+    norm_row_data = min_max_transform(row_data)
     norm_row_data = pd.DataFrame(norm_row_data)
-    norm_row_data = norm_row_data.values.reshape(1, 9)
+    norm_row_data = norm_row_data.values.reshape(1, num)
     norm_row_data = pd.DataFrame(norm_row_data)
     norm_row_data.columns = columns
 
@@ -45,23 +46,22 @@ if __name__ == "__main__":
         # fea_dist_method = "Euclidean"
         # image_dist_method = "Euclidean"
         # error = "abs"
-        result_dir = "/mnt/Documents/Major_Project/ids_gui/Results/euclidean"
+        result_dir = "Results/euclidean"
         os.makedirs(name=result_dir, exist_ok=True)
         table_to_image(
             norm_row_data,
             [num_row, num_col],
             result_dir,
         )
+
     if manhattan:
         # fea_dist_method = "Pearson"
         # image_dist_method = "Manhattan"
         # error = "squared"
-        result_dir = "/mnt/Documents/Major_Project/ids_gui/Results/manhattan"
+        result_dir = "Results/manhattan"
         os.makedirs(name=result_dir, exist_ok=True)
         table_to_image(
             norm_row_data,
             [num_row, num_col],
             result_dir,
         )
-
-

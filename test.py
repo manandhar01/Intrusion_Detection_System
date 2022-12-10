@@ -1,1 +1,2 @@
-print('jdhafiwehahgepaf')
+import os
+print(os.getcwd())
