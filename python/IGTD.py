@@ -43,9 +43,9 @@ if __name__ == "__main__":
     norm_row_data.columns = columns
 
     if euclidean:
-        # fea_dist_method = "Euclidean"
-        # image_dist_method = "Euclidean"
-        # error = "abs"
+        fea_dist_method = "Euclidean"
+        image_dist_method = "Euclidean"
+        error = "abs"
         result_dir = "Results/euclidean"
         os.makedirs(name=result_dir, exist_ok=True)
         table_to_image(
