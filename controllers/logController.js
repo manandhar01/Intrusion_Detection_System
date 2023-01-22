@@ -18,7 +18,6 @@ const createLog = (req, res) => {
 const getLogs = (req, res) => {
     const logFile = "Logs/log.txt";
     logs = fs.readFileSync(logFile, "utf-8").split("\n").slice(0, -1);
-    console.log(logs);
     res.send({ logs });
 };
 
