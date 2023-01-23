@@ -12,6 +12,7 @@ const getScatterData = (req, res) => {
     const currentDate = Date.now();
     let attackCounts = Array(10).fill(0);
     let normalCounts = Array(10).fill(0);
+    let attackType0Counts = Array(10).fill(0);
     let attackType1Counts = Array(10).fill(0);
     let attackType2Counts = Array(10).fill(0);
     let attackType3Counts = Array(10).fill(0);
@@ -30,6 +31,9 @@ const getScatterData = (req, res) => {
             attackCounts[timeDifference] += 1;
             normalCounts[timeDifference] += Math.floor(Math.random() * 5);
             switch (attackType) {
+                case 0:
+                    attackType0Counts[timeDifference] += 1;
+                    break;
                 case 1:
                     attackType1Counts[timeDifference] += 1;
                     break;
@@ -63,6 +67,7 @@ const getScatterData = (req, res) => {
     let scatterData = [
         attackCounts,
         normalCounts,
+        attackType0Counts,
         attackType1Counts,
         attackType2Counts,
         attackType3Counts,

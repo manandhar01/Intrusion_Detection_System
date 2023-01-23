@@ -6,8 +6,16 @@ const {
     upload,
     uploadFile,
 } = require("../controllers/formController");
+const {
+    getMonitorState,
+    startMonitoring,
+} = require("../controllers/monitorController");
 
 const apiRouter = express.Router();
+
+// Monitor
+apiRouter.get("/getMonitorState", getMonitorState);
+apiRouter.post("/startMonitoring", startMonitoring);
 
 // Form related URLs
 apiRouter.post("/formpost", formPost);
