@@ -28,12 +28,17 @@ io.on("connection", (socket) => {
         csvtojson()
             .fromFile(filename)
             .then((data) => {
-                let columns = [];
-                cols = Object.keys(data[0]);
-                cols.forEach((col) => {
-                    columns.push({ accessorKey: col, header: col });
+                // let columns = [];
+                let d = [];
+                data.forEach((datum) => {
+                    d.push(Object.values(datum));
                 });
-                socket.emit("sent from the server", data, columns);
+                cols = Object.keys(data[0]);
+                // cols.forEach((col) => {
+                //     columns.push({ accessorKey: col, header: col });
+                // });
+                // socket.emit("sent from the server", data, columns);
+                socket.emit("sent from the server", d, cols);
             });
     });
     console.log(`User connected: ${socket.id}`);

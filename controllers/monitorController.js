@@ -9,7 +9,6 @@ const getMonitorState = async (req, res) => {
     });
     process.on("exit", () => {
         if (d.includes("nautilus")) {
-            console.log("yes");
             state = 1;
         }
         res.json({ state, abc: d });

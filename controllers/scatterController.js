@@ -65,8 +65,8 @@ const getScatterData = (req, res) => {
         }
     });
     let scatterData = [
-        attackCounts,
         normalCounts,
+        attackCounts,
         attackType0Counts,
         attackType1Counts,
         attackType2Counts,
