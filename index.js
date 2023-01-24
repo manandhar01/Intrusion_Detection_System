@@ -22,7 +22,7 @@ const io = new Server(server, {
     },
 });
 
-const filename = "./test.csv";
+const filename = "Logs/capture.csv";
 io.on("connection", (socket) => {
     fs.watchFile(filename, () => {
         csvtojson()
@@ -30,10 +30,13 @@ io.on("connection", (socket) => {
             .then((data) => {
                 // let columns = [];
                 let d = [];
-                data.forEach((datum) => {
-                    d.push(Object.values(datum));
-                });
-                cols = Object.keys(data[0]);
+                let cols = [];
+                if (data.length) {
+                    data.forEach((datum) => {
+                        d.push(Object.values(datum));
+                    });
+                    cols = Object.keys(data[0]);
+                }
                 // cols.forEach((col) => {
                 //     columns.push({ accessorKey: col, header: col });
                 // });
