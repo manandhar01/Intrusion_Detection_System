@@ -19,6 +19,20 @@ const formPost = (req, res) => {
     predictOne(Object.values(req.body)).then((predictedClass) => {
         res.json({ predictedClass });
     });
+
+    // jsonData=JSON.stringify(req.body);
+    // const process = spawn("python", ["arg.py","-json",jsonData]);
+    // process.stdout.on("data", (data) => {
+    //     console.log(data.toString("utf8"));
+    // });
+    // process.stderr.on('data', (data) => {
+    //     console.error(`stderr: ${data}`);
+    // });
+
+    // process.on('close', (code) => {
+    //     console.log(`child process exited with code ${code}`);
+    // });
+    // res.json(req.body);
 };
 
 const uploadFile = (req, res) => {
