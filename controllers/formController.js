@@ -1,6 +1,7 @@
+const fs = require("fs");
 const multer = require("multer");
 const { spawn } = require("child_process");
-const fs = require("fs");
+const { predictOne } = require("./predictionController");
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -15,11 +16,9 @@ const upload = multer({
 
 const formPost = (req, res) => {
     console.log(Object.values(req.body));
-    const process = spawn("python", ["test.py"]);
-    process.stdout.on("data", (data) => {
-        console.log(data.toString("utf8"));
+    predictOne(Object.values(req.body)).then((predictedClass) => {
+        res.json({ predictedClass });
     });
-    // res.json(req.body);
 };
 
 const uploadFile = (req, res) => {

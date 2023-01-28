@@ -1,9 +1,21 @@
 const { spawn } = require("child_process");
+const { Observable } = require("rxjs");
 
-const getMonitorState = async (req, res) => {
-    const process = spawn("ps ax | grep cicflowmeter | wc -l", { shell: true });
+const getProessCount = new Observable((subscriber) => {
+    const process = spawn("ps -e | grep [c]icflowmeter | wc -l", {
+        shell: true,
+    });
     process.stdout.on("data", (data) => {
-        if (parseInt(data.toString("utf8")) > 1) {
+        subscriber.next(parseInt(data.toString("utf8")));
+    });
+    process.on("close", () => {
+        subscriber.complete();
+    });
+});
+
+const getMonitorState = (req, res) => {
+    getProessCount.subscribe((processCount) => {
+        if (processCount) {
             res.json({ state: 1 });
         } else {
             res.json({ state: 0 });
@@ -24,7 +36,15 @@ const startMonitoring = (req, res) => {
     cicflowmeter.stderr.on("data", (data) => {
         console.log("Stderr", data.toString("utf8"));
     });
-    res.json({ ok: true, state: 1 });
+    const handle = setInterval(() => {
+        getProessCount.subscribe((processCount) => {
+            if (processCount) {
+                clearInterval(handle);
+                console.log("cicflowmeter started");
+                res.json({ ok: true, state: 1 });
+            }
+        });
+    }, 1000);
 };
 
 module.exports = { getMonitorState, startMonitoring };
