@@ -1,17 +1,15 @@
 const express = require("express");
-const app = express();
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const http = require("http");
 const { Server } = require("socket.io");
-const cors = require("cors");
-const server = http.createServer(app);
-const fs = require("fs");
-const csvtojson = require("csvtojson");
-const bodyParser = require("body-parser");
+const { sendTraffic } = require("./controllers/trafficController");
 const apiRouter = require("./routes");
+const app = express();
+const server = http.createServer(app);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use(cors());
 
 const io = new Server(server, {
@@ -21,31 +19,7 @@ const io = new Server(server, {
         methods: ["GET", "POST"],
     },
 });
-
-const filename = "Logs/capture.csv";
-io.on("connection", (socket) => {
-    fs.watchFile(filename, () => {
-        csvtojson()
-            .fromFile(filename)
-            .then((data) => {
-                // let columns = [];
-                let d = [];
-                let cols = [];
-                if (data.length) {
-                    data.forEach((datum) => {
-                        d.push(Object.values(datum));
-                    });
-                    cols = Object.keys(data[0]);
-                }
-                // cols.forEach((col) => {
-                //     columns.push({ accessorKey: col, header: col });
-                // });
-                // socket.emit("sent from the server", data, columns);
-                socket.emit("sent from the server", d, cols);
-            });
-    });
-    console.log(`User connected: ${socket.id}`);
-});
+io.on("connection", sendTraffic);
 
 app.use("/", apiRouter);
 
