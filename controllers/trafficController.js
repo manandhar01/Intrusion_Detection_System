@@ -1,25 +1,23 @@
-const fs = require("fs");
 const csvtojson = require("csvtojson");
 
 const filename = "Logs/capture.csv";
 
-const sendTraffic = (socket) => {
-    fs.watchFile(filename, () => {
-        csvtojson()
-            .fromFile(filename)
-            .then((data) => {
-                let d = [];
-                let cols = [];
-                if (data.length) {
-                    data.forEach((datum) => {
-                        d.push(Object.values(datum));
-                    });
-                    cols = Object.keys(data[0]);
-                }
-                socket.emit("sent from the server", d, cols);
-            });
-    });
-    console.log(`User connected: ${socket.id}`);
+const getTrafficData = (req, res) => {
+    const index = req.query.dataCount;
+    csvtojson()
+        .fromFile(filename)
+        .then((data) => {
+            let d = [];
+            let cols = [];
+            if (data.length) {
+                data.forEach((datum) => {
+                    d.push(Object.values(datum));
+                });
+                cols = Object.keys(data[0]);
+            }
+            d = d.slice(index);
+            res.json({ data: d, cols: cols });
+        });
 };
 
-module.exports = { sendTraffic };
+module.exports = { getTrafficData };

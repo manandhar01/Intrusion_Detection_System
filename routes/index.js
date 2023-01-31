@@ -1,6 +1,7 @@
 const express = require("express");
 const { createLog, getLogs } = require("../controllers/logController");
 const { getScatterData } = require("../controllers/scatterController");
+const { getTrafficData } = require("../controllers/trafficController");
 const {
     formPost,
     upload,
@@ -12,6 +13,9 @@ const {
 } = require("../controllers/monitorController");
 
 const apiRouter = express.Router();
+
+// Traffic
+apiRouter.get("/getTrafficData", getTrafficData);
 
 // Monitor
 apiRouter.get("/getMonitorState", getMonitorState);
