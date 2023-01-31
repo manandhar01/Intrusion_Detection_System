@@ -1,6 +1,8 @@
 const fs = require("fs");
 
-const createLog = (req, res) => {
+const logFile = "Logs/log.txt";
+
+const createLog = () => {
     const logFile = "Logs/log.txt";
     let randint = Math.floor(Math.random() * 2);
     if (randint) {
@@ -9,16 +11,23 @@ const createLog = (req, res) => {
         const timestamp = Date.now();
         log = { attack, timestamp, attackType };
         fs.appendFileSync(logFile, `${timestamp}, ${attackType}\n`);
-        res.json(log);
-    } else {
-        res.json({ attack: false });
     }
 };
 
-const getLogs = (req, res) => {
-    const logFile = "Logs/log.txt";
-    logs = fs.readFileSync(logFile, "utf-8").split("\n").slice(0, -1);
-    res.send({ logs });
+const getLogData = (req, res) => {
+    const index = req.query.logCount;
+    fs.readFile(logFile, "utf-8", (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+            data = data.split("\n").slice(index, -1);
+            res.json({ logs: data });
+        }
+    });
 };
 
-module.exports = { createLog, getLogs };
+const generateDummyLogData = () => {
+    setInterval(createLog, 5000);
+};
+
+module.exports = { generateDummyLogData, createLog, getLogData };

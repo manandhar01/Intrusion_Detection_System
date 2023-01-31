@@ -1,5 +1,5 @@
 const express = require("express");
-const { createLog, getLogs } = require("../controllers/logController");
+const { getLogData } = require("../controllers/logController");
 const { getScatterData } = require("../controllers/scatterController");
 const { getTrafficData } = require("../controllers/trafficController");
 const {
@@ -26,8 +26,7 @@ apiRouter.post("/formpost", formPost);
 apiRouter.post("/upload_file", upload, uploadFile);
 
 // Logs
-apiRouter.get("/test", createLog);
-apiRouter.get("/get-logs", getLogs);
+apiRouter.get("/getLogData", getLogData);
 
 // ScatterPlot
 apiRouter.get("/get-scatterData", getScatterData);
