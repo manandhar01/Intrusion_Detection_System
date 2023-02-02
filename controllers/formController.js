@@ -15,10 +15,9 @@ const upload = multer({
 }).single("file");
 
 const formPost = (req, res) => {
-    console.log(Object.values(req.body));
-    predictOne(Object.values(req.body)).then((predictedClass) => {
-        res.json({ predictedClass });
-    });
+    const data = Object.values(req.body);
+    const prediction = predictOne(data);
+    res.json({ prediction });
 
     // jsonData=JSON.stringify(req.body);
     // const process = spawn("python", ["arg.py","-json",jsonData]);
@@ -32,7 +31,6 @@ const formPost = (req, res) => {
     // process.on('close', (code) => {
     //     console.log(`child process exited with code ${code}`);
     // });
-    // res.json(req.body);
 };
 
 const uploadFile = (req, res) => {

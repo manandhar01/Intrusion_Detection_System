@@ -2,16 +2,11 @@ const fs = require("fs");
 
 const logFile = "Logs/log.txt";
 
-const createLog = () => {
-    const logFile = "Logs/log.txt";
-    let randint = Math.floor(Math.random() * 2);
-    if (randint) {
-        const attack = true;
-        const attackType = Math.floor(Math.random() * 10);
-        const timestamp = Date.now();
-        log = { attack, timestamp, attackType };
-        fs.appendFileSync(logFile, `${timestamp}, ${attackType}\n`);
-    }
+const createLog = (prediction) => {
+    fs.appendFileSync(
+        logFile,
+        `${prediction.timestamp}, ${prediction.class}\n`
+    );
 };
 
 const getLogData = (req, res) => {
@@ -27,7 +22,16 @@ const getLogData = (req, res) => {
 };
 
 const generateDummyLogData = () => {
-    setInterval(createLog, 5000);
+    setInterval(() => {
+        if (Math.floor(Math.random() * 2)) {
+            const predictedClass = Math.floor(Math.random() * 10);
+            createLog({
+                attack: true,
+                timestamp: Date.now(),
+                class: predictedClass,
+            });
+        }
+    }, 5000);
 };
 
 module.exports = { generateDummyLogData, createLog, getLogData };

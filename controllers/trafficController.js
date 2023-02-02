@@ -1,8 +1,8 @@
 const fs = require("fs");
 const csvtojson = require("csvtojson");
 const { formatData } = require("./formatController");
-
-// const { createLog } = require("../controllers/logController");
+const { predictOne } = require("./predictionController");
+const { createLog } = require("./logController");
 
 const filename = "Logs/capture.csv";
 
@@ -36,14 +36,11 @@ const watchCaptureFile = () => {
                     const newData = data.substring(prevData.length);
                     prevData = data;
                     const formattedData = formatData(newData);
-                    console.log(formattedData[0]);
-                    // The index of captured data have been properly modified.
-                    // TODO ---> Feed this new data to the machine learning model in order to predict
-                    // create a new log entry if an attack is predicted
-                    // predicted = predict(someData)
-                    // if(predicted.class == "attack") {
-                    //      createLog(predicted);
-                    // }
+                    const prediction = predictOne(formattedData[0]);
+                    console.log(prediction);
+                    if (prediction.attack) {
+                        createLog(prediction);
+                    }
                 }
             }
         });
