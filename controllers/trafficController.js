@@ -36,11 +36,13 @@ const watchCaptureFile = () => {
                     const newData = data.substring(prevData.length);
                     prevData = data;
                     const formattedData = formatData(newData);
-                    const prediction = predictOne(formattedData[0]);
-                    console.log(prediction);
-                    if (prediction.attack) {
-                        createLog(prediction);
-                    }
+                    formattedData.forEach((fd) => {
+                        const prediction = predictOne(fd);
+                        console.log(prediction);
+                        if (prediction.attack) {
+                            createLog(prediction);
+                        }
+                    });
                 }
             }
         });
