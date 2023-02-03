@@ -10,6 +10,7 @@ const {
 const {
     getMonitorState,
     startMonitoring,
+    stopMonitoring,
 } = require("../controllers/monitorController");
 
 const apiRouter = express.Router();
@@ -20,6 +21,7 @@ apiRouter.get("/getTrafficData", getTrafficData);
 // Monitor
 apiRouter.get("/getMonitorState", getMonitorState);
 apiRouter.post("/startMonitoring", startMonitoring);
+apiRouter.post("/stopMonitoring", stopMonitoring);
 
 // Form related URLs
 apiRouter.post("/formpost", formPost);

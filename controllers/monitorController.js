@@ -47,4 +47,22 @@ const startMonitoring = (req, res) => {
     }, 1000);
 };
 
-module.exports = { getMonitorState, startMonitoring };
+const stopMonitoring = (req, res) => {
+    const killcicflowmeter = spawn(`pgrep cicflowmeter | xargs kill`, {
+        shell: true,
+    });
+    killcicflowmeter.stdout.on("data", (data) => {
+        console.log("Stdout", data.toString("utf8"));
+    });
+    killcicflowmeter.stderr.on("data", (data) => {
+        console.log("Stderr", data.toString("utf8"));
+    });
+    killcicflowmeter.on("exit", (code) => {
+        if (!code) {
+            console.log("cicflowmeter stopped");
+            res.json({ ok: true, state: 0 });
+        }
+    });
+};
+
+module.exports = { getMonitorState, startMonitoring, stopMonitoring };
