@@ -2,20 +2,21 @@ const { spawn } = require("child_process");
 const predictionFile = "AI/omniglot-fewshot/frame.py";
 
 const predictOne = (data) => {
-    // TODO ---> Feed this new data to the actual machine learning model in order to predict
-    if (Math.floor(Math.random() * 2)) {
-        const predictedClass = Math.floor(Math.random() * 10);
-        return { attack: true, timestamp: Date.now(), class: predictedClass };
-    } else {
-        return { attack: false };
-    }
-    // const predict = spawn(`python ${predictionFile} ${data}`, { shell: true });
-    // predict.stdout.on("data", (data) => {
-    //     console.log(data.toString("utf8"));
-    // });
-    // predict.on("close", (code) => {
-    //     return predictedClass;
-    // });
+    const predict = spawn(`python ${predictionFile} ${data} 1`, {
+        shell: true,
+        env: { ...process.env, PYTHONPATH: "./AI" },
+    });
+    predict.stdout.on("data", (data) => {
+        console.log(data.toString("utf8"));
+    });
+    predict.stderr.on("data", (data) => {
+        console.log(data.toString("utf8"));
+    });
+    return new Promise((resolve, reject) => {
+        predict.on("close", (code) => {
+            resolve(true);
+        });
+    });
 };
 
 const predictMany = (data) => {

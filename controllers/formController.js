@@ -15,22 +15,37 @@ const upload = multer({
 }).single("file");
 
 const formPost = (req, res) => {
-    const data = Object.values(req.body);
-    const prediction = predictOne(data);
-    res.json({ prediction });
-
-    // jsonData=JSON.stringify(req.body);
-    // const process = spawn("python", ["arg.py","-json",jsonData]);
-    // process.stdout.on("data", (data) => {
-    //     console.log(data.toString("utf8"));
-    // });
-    // process.stderr.on('data', (data) => {
-    //     console.error(`stderr: ${data}`);
-    // });
-
-    // process.on('close', (code) => {
-    //     console.log(`child process exited with code ${code}`);
-    // });
+    let data = Object.values(req.body);
+    data.forEach((datum, index) => {
+        if (datum === "") {
+            data[index] = 0;
+        }
+    });
+    predictOne(data).then((result) => {
+        if (result) {
+            const prediction = fs
+                .readFileSync("Logs/log_one.txt", "utf-8")
+                .slice(0, -2)
+                .split(",");
+            if (prediction[2] !== "BENIGN") {
+                res.json({
+                    prediction: {
+                        attack: true,
+                        timestamp: parseInt(prediction[0]),
+                        class: prediction[2],
+                    },
+                });
+            } else {
+                res.json({
+                    prediction: {
+                        attack: false,
+                    },
+                });
+            }
+        } else {
+            res.json({ error: "could not predict" });
+        }
+    });
 };
 
 const uploadFile = (req, res) => {
