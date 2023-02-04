@@ -1,8 +1,8 @@
 const fs = require("fs");
 const csvtojson = require("csvtojson");
 const { formatData } = require("./formatController");
-const { predictOne } = require("./predictionController");
-const { createLog } = require("./logController");
+const { predictMany } = require("./predictionController");
+// const { createLog } = require("./logController");
 
 const filename = "Logs/capture.csv";
 
@@ -36,13 +36,7 @@ const watchCaptureFile = () => {
                     const newData = data.substring(prevData.length);
                     prevData = data;
                     const formattedData = formatData(newData);
-                    formattedData.forEach((fd) => {
-                        const prediction = predictOne(fd);
-                        console.log(prediction);
-                        if (prediction.attack) {
-                            createLog(prediction);
-                        }
-                    });
+                    predictMany(formattedData);
                 }
             }
         });

@@ -1,0 +1,16 @@
+3c3
+< from decimal import Decimal
+---
+> from decimal import Decimal 
+216c216
+<                 Decimal("1e6") * (packet.time - self.latest_timestamp)
+---
+>                 1000000 * (packet.time - self.latest_timestamp)
+245c245
+<         if (packet.time - (last_timestamp / Decimal("1e6"))) > constants.CLUMP_TIMEOUT:
+---
+>         if (packet.time - (last_timestamp / 1000000)) > constants.CLUMP_TIMEOUT:
+259c259
+<             self.idle.append(Decimal("1e6") * (current_time - self.last_active))
+---
+>             self.idle.append(1000000 * (current_time - self.last_active))
