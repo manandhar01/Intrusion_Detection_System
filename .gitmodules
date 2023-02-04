@@ -1,0 +1,3 @@
+[submodule "AI"]
+	path = AI
+	url = https://github.com/ManandharSudip4/Intrusion-Detection-System-Using-Fewshot-Learning.git
