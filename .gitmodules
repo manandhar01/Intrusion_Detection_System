@@ -1,3 +1,6 @@
 [submodule "AI"]
 	path = AI
 	url = https://github.com/ManandharSudip4/Intrusion-Detection-System-Using-Fewshot-Learning.git
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/abhinandanshrestha/webgui.git
