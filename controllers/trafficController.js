@@ -36,7 +36,13 @@ const watchCaptureFile = () => {
                     const newData = data.substring(prevData.length);
                     prevData = data;
                     const formattedData = formatData(newData);
-                    predictMany(formattedData);
+                    predictMany(formattedData).then((result) => {
+                        if (result) {
+                            console.log("Prediction complete");
+                        } else {
+                            console.log("could not predict");
+                        }
+                    });
                 }
             }
         });

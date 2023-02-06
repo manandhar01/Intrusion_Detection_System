@@ -120,4 +120,12 @@ const formatData = (data) => {
     return formattedData;
 };
 
-module.exports = { arrangeOne, arrangeMany, formatData };
+const formatFormCSV = (data) => {
+    data = data.split(",");
+    for (let i = 0; i < indicesToRemove.length; i++) {
+        data.splice(indicesToRemove[i], 1);
+    }
+    return arrangeOne(data);
+};
+
+module.exports = { arrangeOne, arrangeMany, formatData, formatFormCSV };

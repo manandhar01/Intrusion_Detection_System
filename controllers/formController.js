@@ -1,7 +1,8 @@
 const fs = require("fs");
 const multer = require("multer");
-const { spawn } = require("child_process");
+// const { spawn } = require("child_process");
 const { predictOne } = require("./predictionController");
+const { formatFormCSV } = require("./formatController");
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -51,29 +52,38 @@ const formPost = (req, res) => {
 const uploadFile = (req, res) => {
     const line_no = req.body.line_no;
     const filename = req.file.originalname;
-    const IGTDScript = "python/IGTD.py";
-    const testScript = "python/test.py";
-    const script1 = spawn("python", [IGTDScript, "test.csv", line_no, "-m"]);
-    script1.stdout.on("data", (data) => {
-        console.log(data.toString("utf8"));
-    });
-    script1.on("close", (code) => {
-        console.log(`${IGTDScript} terminated with code ${code}`);
-        const script2 = spawn("python", [testScript]);
-        script2.stdout.on("data", (data) => {
-            console.log(data.toString("utf8"));
-        });
-        script2.on("close", (code) => {
-            console.log(`${testScript} terminated with code ${code}`);
-            fs.unlink(`uploads/${filename}`, (err) => {
-                if (err) {
-                    console.log(err.message);
-                } else {
-                    console.log(`${filename} deleted successfully`);
-                }
-                res.send({ a: 5 });
-            });
-        });
+    const csvformat = req.body.csvformat;
+    let data = fs
+        .readFileSync(`uploads/${filename}`, "utf-8")
+        .split("\n")
+        [line_no].slice(0, -1);
+    if (csvformat === "cicflowmeter") {
+        data = formatFormCSV(data);
+    }
+    predictOne(data).then((result) => {
+        if (result) {
+            const prediction = fs
+                .readFileSync("Logs/log_one.txt", "utf-8")
+                .slice(0, -2)
+                .split(",");
+            if (prediction[2] !== "BENIGN") {
+                res.json({
+                    prediction: {
+                        attack: true,
+                        timestamp: parseInt(prediction[0]),
+                        class: prediction[2],
+                    },
+                });
+            } else {
+                res.json({
+                    prediction: {
+                        attack: false,
+                    },
+                });
+            }
+        } else {
+            res.json({ error: "could not predict" });
+        }
     });
 };
 

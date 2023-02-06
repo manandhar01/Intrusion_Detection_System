@@ -20,7 +20,6 @@ const predictOne = (data) => {
 };
 
 const predictMany = (data) => {
-    let predictions = Array(data.length).fill(0);
     const predict = spawn(`python ${predictionFile} ${data}`, {
         shell: true,
         env: { ...process.env, PYTHONPATH: "./AI" },
@@ -33,8 +32,10 @@ const predictMany = (data) => {
     predict.stderr.on("data", (data) => {
         console.log(data.toString("utf8"));
     });
-    predict.on("close", (code) => {
-        return predictions;
+    return new Promise((resolve, reject) => {
+        predict.on("close", (code) => {
+            resolve(true);
+        });
     });
 };
 
