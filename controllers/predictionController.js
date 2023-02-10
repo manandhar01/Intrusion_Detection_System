@@ -20,12 +20,10 @@ const predictOne = (data) => {
 };
 
 const predictMany = (data) => {
-    const predict = spawn(`python ${predictionFile} ${data}`, {
+    const predict = spawn(`python ${predictionFile} ${data} 2`, {
         shell: true,
         env: { ...process.env, PYTHONPATH: "./AI" },
     });
-    console.log("In JS...");
-    console.log(data);
     predict.stdout.on("data", (data) => {
         console.log(data.toString("utf8"));
     });

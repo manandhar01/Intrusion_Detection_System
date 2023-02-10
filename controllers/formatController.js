@@ -120,7 +120,7 @@ const formatData = (data) => {
     return formattedData;
 };
 
-const formatFormCSV = (data) => {
+const formatOneFormCSVCicflowmeter = (data) => {
     data = data.split(",");
     for (let i = 0; i < indicesToRemove.length; i++) {
         data.splice(indicesToRemove[i], 1);
@@ -128,4 +128,24 @@ const formatFormCSV = (data) => {
     return arrangeOne(data);
 };
 
-module.exports = { arrangeOne, arrangeMany, formatData, formatFormCSV };
+const formatManyFormCSVCicflowmeter = (data) => {
+    return data.map((d) => formatOneFormCSVCicflowmeter(d));
+};
+
+const formatOneFormCSVCicids2017 = (data) => {
+    return data.split(",").slice(0, -1);
+};
+
+const formatManyFormCSVCicids2017 = (data) => {
+    return data.map((d) => formatOneFormCSVCicids2017(d));
+};
+
+module.exports = {
+    arrangeOne,
+    arrangeMany,
+    formatData,
+    formatOneFormCSVCicflowmeter,
+    formatManyFormCSVCicflowmeter,
+    formatOneFormCSVCicids2017,
+    formatManyFormCSVCicids2017,
+};
