@@ -81,7 +81,7 @@ const uploadFile = (req, res) => {
     }
 
     if (allData) {
-        predictMany(data).then((result) => {
+        predictMany(data, 1).then((result) => {
             if (result) {
                 const predictions = fs
                     .readFileSync("Logs/log_many.txt", "utf-8")

@@ -19,8 +19,12 @@ const predictOne = (data) => {
     });
 };
 
-const predictMany = (data) => {
-    const predict = spawn(`python ${predictionFile} ${data} 2`, {
+const predictMany = (data, x = 0) => {
+    let command = `python ${predictionFile} ${data}`;
+    if (x) {
+        command = `python ${predictionFile} ${data} 2`;
+    }
+    const predict = spawn(command, {
         shell: true,
         env: { ...process.env, PYTHONPATH: "./AI" },
     });
