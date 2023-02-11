@@ -133,7 +133,9 @@ const formatManyFormCSVCicflowmeter = (data) => {
 };
 
 const formatOneFormCSVCicids2017 = (data) => {
-    return data.split(",").slice(0, -1);
+    data = data.split(",");
+    const label = data.pop();
+    return { data, label };
 };
 
 const formatManyFormCSVCicids2017 = (data) => {

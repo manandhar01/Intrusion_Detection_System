@@ -63,6 +63,7 @@ const uploadFile = (req, res) => {
     let data = fs.readFileSync(`uploads/${filename}`, "utf-8").split("\n");
     data = data[data.length - 1] === "" ? data.slice(0, -1) : data;
     data = /\d/.test(data[0]) ? data : data.slice(1);
+    let label = [];
 
     if (csvformat === "cicflowmeter") {
         if (allData) {
@@ -73,10 +74,17 @@ const uploadFile = (req, res) => {
         }
     } else {
         if (allData) {
-            data = formatManyFormCSVCicids2017(data);
+            const data_and_label = formatManyFormCSVCicids2017(data);
+            data = [];
+            data_and_label.forEach((dl) => {
+                data.push(dl["data"]);
+                label.push(dl["label"]);
+            });
         } else {
             data = data[line_no].slice(0, -1);
-            data = formatOneFormCSVCicids2017(data);
+            const data_and_label = formatOneFormCSVCicids2017(data);
+            data = data_and_label["data"];
+            label = data_and_label["label"];
         }
     }
 
@@ -90,7 +98,7 @@ const uploadFile = (req, res) => {
                     .map((prediction) => {
                         return prediction.slice(0, -1).split(",");
                     });
-                res.json({ predictions });
+                res.json({ predictions, label });
             } else {
                 res.json({ error: "could not predict" });
             }
