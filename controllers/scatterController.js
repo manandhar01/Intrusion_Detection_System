@@ -19,7 +19,7 @@ const getScatterData = (req, res) => {
     logs.forEach((log) => {
         log = log.slice(0, -1).split(",");
         const timeDifference = Math.floor(
-            (currentDate - parseInt(log[0])) / (1000 * 60)
+            (currentDate - new Date(log[0]).getTime()) / (1000 * 60)
         );
         const category = parseInt(log[1]);
         if (timeDifference >= 0 && timeDifference < 10) {
