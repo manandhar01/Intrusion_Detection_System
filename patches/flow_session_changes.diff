@@ -1,19 +1,20 @@
-10a11,12
+2a3
 > from time import time
-> 
-13a16
-> INTERVAL_FOR_GARBAGE_COLLECTION = 5 
-21a25
+19a21
 >         self.__time = time()
-104,106c108,112
+89d90
+< 
+104,107c105,112
 <         if self.packets_count % GARBAGE_COLLECT_PACKETS == 0 or (
 <             flow.duration > 120 and self.output_mode == "flow"
 <         ):
+<             self.garbage_collect(packet.time)
 ---
->         #if self.packets_count % GARBAGE_COLLECT_PACKETS == 0 or (
->         #    flow.duration > 120 and self.output_mode == "flow"
->         #):
+>         # if self.packets_count % GARBAGE_COLLECT_PACKETS == 0 or (
+>         #     flow.duration > 120 and self.output_mode == "flow"
+>         # ):
+>         #     self.garbage_collect(packet.time)
 >         new_time = time()
->         if (new_time - self.__time >= 5):
-107a114
->             self.__time = new_time 
+>         if new_time - self.__time >= 1:
+>             self.garbage_collect(None)
+>             self.__time = new_time
