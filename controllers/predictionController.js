@@ -1,8 +1,8 @@
 const { spawn } = require("child_process");
-const predictionFile = "AI/omniglot-fewshot/frame.py";
+const predictionFile = "AI/omniglot-fewshot/predictFormData.py";
 
-const predictOne = (data) => {
-    const predict = spawn(`python ${predictionFile} ${data} 1`, {
+const predictOne = (filename, line_no = 0) => {
+    const predict = spawn(`python ${predictionFile} ${filename} ${line_no}`, {
         shell: true,
         env: { ...process.env, PYTHONPATH: "./AI" },
     });
@@ -19,15 +19,14 @@ const predictOne = (data) => {
     });
 };
 
-const predictMany = (data, x = 0) => {
-    let command = `python ${predictionFile} ${data}`;
-    if (x) {
-        command = `python ${predictionFile} ${data} 2`;
-    }
-    const predict = spawn(command, {
-        shell: true,
-        env: { ...process.env, PYTHONPATH: "./AI" },
-    });
+const predictMany = (filename, line_no, fileFormat) => {
+    const predict = spawn(
+        `python ${predictionFile} ${filename} ${line_no} ${fileFormat}`,
+        {
+            shell: true,
+            env: { ...process.env, PYTHONPATH: "./AI" },
+        }
+    );
     predict.stdout.on("data", (data) => {
         console.log(data.toString("utf8"));
     });
