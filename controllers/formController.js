@@ -1,6 +1,5 @@
 const fs = require("fs");
 const multer = require("multer");
-// const { spawn } = require("child_process");
 const { predictOne, predictMany } = require("./predictionController");
 const {
     formatOneFormCSVCicflowmeter,
@@ -33,21 +32,13 @@ const formPost = (req, res) => {
                 .readFileSync("Logs/log_one.txt", "utf-8")
                 .slice(0, -2)
                 .split(",");
-            if (prediction[2] !== "BENIGN") {
-                res.json({
-                    prediction: {
-                        attack: true,
-                        timestamp: parseInt(prediction[0]),
-                        class: prediction[2],
-                    },
-                });
-            } else {
-                res.json({
-                    prediction: {
-                        attack: false,
-                    },
-                });
-            }
+            res.json({
+                prediction: {
+                    timestamp: prediction[0],
+                    predictedCategory: prediction[1],
+                    categoryLabel: prediction[2],
+                },
+            });
         } else {
             res.json({ error: "could not predict" });
         }
@@ -55,10 +46,10 @@ const formPost = (req, res) => {
 };
 
 const uploadFile = (req, res) => {
-    const line_no = req.body.line_no;
+    const line_no = parseInt(req.body.line_no);
     const filename = req.file.originalname;
     const csvformat = req.body.csvformat;
-    const allData = req.body.allData;
+    const allData = req.body.allData === "true" ? true : false;
 
     let data = fs.readFileSync(`uploads/${filename}`, "utf-8").split("\n");
     data = data[data.length - 1] === "" ? data.slice(0, -1) : data;
@@ -69,7 +60,7 @@ const uploadFile = (req, res) => {
         if (allData) {
             data = formatManyFormCSVCicflowmeter(data);
         } else {
-            data = data[line_no].slice(0, -1);
+            data = data[line_no];
             data = formatOneFormCSVCicflowmeter(data);
         }
     } else {
@@ -110,21 +101,14 @@ const uploadFile = (req, res) => {
                     .readFileSync("Logs/log_one.txt", "utf-8")
                     .slice(0, -2)
                     .split(",");
-                if (prediction[2] !== "BENIGN") {
-                    res.json({
-                        prediction: {
-                            attack: true,
-                            timestamp: parseInt(prediction[0]),
-                            class: prediction[2],
-                        },
-                    });
-                } else {
-                    res.json({
-                        prediction: {
-                            attack: false,
-                        },
-                    });
-                }
+
+                res.json({
+                    prediction: {
+                        timestamp: prediction[0],
+                        predictedCategory: prediction[1],
+                        categoryLabel: prediction[2],
+                    },
+                });
             } else {
                 res.json({ error: "could not predict" });
             }
