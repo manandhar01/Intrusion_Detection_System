@@ -12,7 +12,7 @@ const getScatterData = (req, res) => {
     const currentDate = Date.now();
     let categoryCount = {
         attack: Array(10).fill(0),
-        Type11: Array(10).fill(0),
+        BENIGN: Array(10).fill(0),
     };
     let categories = Object.keys(categoryCount);
     let logData = [];
@@ -21,17 +21,17 @@ const getScatterData = (req, res) => {
         const timeDifference = Math.floor(
             (currentDate - new Date(log[0]).getTime()) / (1000 * 60)
         );
-        const category = parseInt(log[1]);
+        const category = log[2];
         if (timeDifference >= 0 && timeDifference < 10) {
             logData.push(log);
-            if (categories.includes(`Type${category}`)) {
-                categoryCount[`Type${category}`][timeDifference] += 1;
+            if (categories.includes(category)) {
+                categoryCount[category][timeDifference] += 1;
             } else {
-                categoryCount[`Type${category}`] = Array(10).fill(0);
-                categoryCount[`Type${category}`][timeDifference] += 1;
-                categories.push(`Type${category}`);
+                categoryCount[category] = Array(10).fill(0);
+                categoryCount[category][timeDifference] += 1;
+                categories.push(category);
             }
-            if (category !== 11) {
+            if (category !== "BENIGN") {
                 categoryCount["attack"][timeDifference] += 1;
             }
         }
