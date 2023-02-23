@@ -14,7 +14,6 @@ const getScatterData = (req, res) => {
         attack: Array(60).fill(0),
         BENIGN: Array(60).fill(0),
     };
-    let categories = Object.keys(categoryCount);
     let logData = [];
     logs.forEach((log) => {
         log = log.slice(0, -1).split(",");
@@ -24,12 +23,11 @@ const getScatterData = (req, res) => {
         const category = log[2];
         if (timeDifference >= 0 && timeDifference < 60) {
             logData.push(log);
-            if (categories.includes(category)) {
+            if (categoryCount.hasOwnProperty(category)) {
                 categoryCount[category][timeDifference] += 1;
             } else {
                 categoryCount[category] = Array(60).fill(0);
                 categoryCount[category][timeDifference] += 1;
-                categories.push(category);
             }
             if (category !== "BENIGN") {
                 categoryCount["attack"][timeDifference] += 1;

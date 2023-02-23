@@ -1,0 +1,8 @@
+262c262
+<             if self.feature.forward_bulk_count != 0:
+---
+>             if self.feature.forward_bulk_duration != 0:
+267c267
+<             if self.feature.backward_bulk_count != 0:
+---
+>             if self.feature.backward_bulk_duration != 0:
