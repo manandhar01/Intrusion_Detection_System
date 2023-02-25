@@ -82,6 +82,15 @@ const uploadFile = (req, res) => {
         } else {
             res.json({ error: "could not predict" });
         }
+        if (fs.existsSync(`uploads/${filename}`)) {
+            fs.unlink(`uploads/${filename}`, (err) => {
+                if (err) {
+                    console.log(err.message);
+                } else {
+                    console.log(`${filename} deleted`);
+                }
+            });
+        }
     });
 };
 
