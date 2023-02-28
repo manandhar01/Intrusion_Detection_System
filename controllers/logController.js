@@ -1,5 +1,4 @@
 const fs = require("fs");
-// const csvtojson = require("csvtojson");
 
 const logFile = "Logs/log.txt";
 
@@ -20,19 +19,6 @@ const getLogData = (req, res) => {
             res.json({ logs: data });
         }
     });
-};
-
-const generateDummyLogData = () => {
-    setInterval(() => {
-        if (Math.floor(Math.random() * 2)) {
-            const predictedClass = Math.floor(Math.random() * 10);
-            createLog({
-                attack: true,
-                timestamp: Date.now(),
-                class: predictedClass,
-            });
-        }
-    }, 5000);
 };
 
 module.exports = { generateDummyLogData, createLog, getLogData };
