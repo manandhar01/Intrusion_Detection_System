@@ -21,4 +21,4 @@ const getLogData = (req, res) => {
     });
 };
 
-module.exports = { generateDummyLogData, createLog, getLogData };
+module.exports = { createLog, getLogData };
