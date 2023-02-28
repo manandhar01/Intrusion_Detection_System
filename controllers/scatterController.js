@@ -26,10 +26,14 @@ const getScatterData = (req, res) => {
             if (categoryCount.hasOwnProperty(category)) {
                 categoryCount[category][timeDifference] += 1;
             } else {
-                categoryCount[category] = Array(60).fill(0);
-                categoryCount[category][timeDifference] += 1;
+                if (category === "College_Normal") {
+                    categoryCount["BENIGN"][timeDifference] += 1;
+                } else {
+                    categoryCount[category] = Array(60).fill(0);
+                    categoryCount[category][timeDifference] += 1;
+                }
             }
-            if (category !== "BENIGN") {
+            if (category !== "BENIGN" && category !== "College_Normal") {
                 categoryCount["attack"][timeDifference] += 1;
             }
         }
