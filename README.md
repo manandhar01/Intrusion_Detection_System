@@ -70,11 +70,12 @@
    ![Prediction](./screenshots/5.png)
 1. Prediction from CSV data
    ![Prediction](./screenshots/6.png)
+   ![Prediction](./screenshots/7.png)
 1. Logs
-   ![Logs](./screenshots/7.png)
+   ![Logs](./screenshots/8.png)
 1. Scatter Page
-   ![Scatter Plot](./screenshots/8.png)
+   ![Scatter Plot](./screenshots/9.png)
 1. Bar Graph
-   ![Bar Graph](./screenshots/9.png)
+   ![Bar Graph](./screenshots/10.png)
 1. Pie Chart
-   ![Pie Chart](./screenshots/10.png)
+   ![Pie Chart](./screenshots/11.png)
